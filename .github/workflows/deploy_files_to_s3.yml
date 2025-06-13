@@ -35,4 +35,4 @@ jobs:
 
       - name: Upload Files to S3
         run: |
-          aws s3 cp ./epicreads_static s3://epic_reads_static_website/ --recursive
+          aws s3 cp ./epicreads_static s3://epic-reads-static-website/ --recursive
