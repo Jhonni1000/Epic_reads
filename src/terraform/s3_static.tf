@@ -41,6 +41,7 @@ resource "aws_s3_bucket_policy" "epic_reads_static_website" {
             }
         ]
     })
+    depends_on = [ aws_s3_bucket_public_access_block.epic_reads_static_website ]
 }
 
 output "website_url" {
