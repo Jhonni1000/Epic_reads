@@ -14,7 +14,7 @@ on:
 env:
   AWS_REGION: ${{ vars.AWS_REGION }}
   AWS_ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
-  TF_WORKING_DIR: ./src
+  TF_WORKING_DIR: ./src/terraform
 
 
 permissions:
