@@ -19,7 +19,7 @@ env:
 
 permissions:
   contents: read
-  id-tokens: write
+  id-token: write
 
 jobs:
   Terraform:
@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working_directory: ${{ env.TF_WORKING_DIR }}
+        working-directory: ${{ env.TF_WORKING_DIR }}
     steps:
       - name: Configure AWS Credentials with Secrets Region
         uses: aws-actions/configure-aws-credentials@v4
