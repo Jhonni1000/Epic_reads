@@ -9,13 +9,13 @@ terraform {
 }
 
 provider "aws" {
-    region = "eu-north-1"
+  region = "eu-north-1"
 }
 
 terraform {
-    backend "s3" {
-        bucket = "epicreads-terraform-statefile"
-        key = "dev/terraform-epicreads"
-        region = "eu-north-1"
-    }
+  backend "s3" {
+    bucket = "epicreads-terraform-statefile"
+    key    = "dev/terraform-epicreads"
+    region = "eu-north-1"
+  }
 }
