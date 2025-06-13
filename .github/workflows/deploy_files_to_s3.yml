@@ -8,6 +8,10 @@ on:
      - "dev/epicreads_static/**"
   workflow_dispatch:
 
+env:
+  AWS_REGION: ${{ vars.AWS_REGION }}
+  AWS_ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
+
 permissions:
   id-token: write
   contents: read 
