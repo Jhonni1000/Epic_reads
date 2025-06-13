@@ -13,11 +13,13 @@ resource "aws_iam_group_policy_attachment" "admin_group_policy" {
 }
 
 resource "aws_iam_group_policy_attachment" "developers_group_policy" {
-    for_each = [
+    for_each = toset(
+        [
         "arn:aws:iam::aws:policy/AmazonEC2FullAccess", 
         "arn:aws:iam::aws:policy/AmazonS3FullAccess", 
         "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
-    ]
+        ]
+    )
     group = aws_iam_group.org_group["DevelopersGroup"].name
     policy_arn = each.value
 }
