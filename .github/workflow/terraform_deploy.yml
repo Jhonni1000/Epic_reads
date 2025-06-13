@@ -1,0 +1,61 @@
+name: Deploy Terraform 
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "src/terraform"
+  pull_request:
+    branches:
+      - main
+
+env:
+  AWS_REGION: ${{ vars.AWS_REGION }}
+  AWS_ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
+  TF_WORKING_DIR: ./src
+
+
+permissions:
+  contents: read
+  id-tokens: write
+
+jobs:
+  Terraform:
+    name: Terraform Deployment
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working_directory: ${{ env.TF_WORKING_DIR }}
+    steps:
+      - name: Configure AWS Credentials with Secrets Region
+        uses: aws-actions/configure-aws-credentials@v4
+        with: 
+          role_to_assume: ${{ env.AWS_ROLE_ARN }}
+          aws_region: ${{ env.AWS_REGION }}
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+      
+      - name: Terraform Format
+        id: fmt
+        run: |
+          terraform fmt -check -recursive -diff
+        continue-on-error: true
+      
+      - name: Terraform Init
+        run: |
+          terraform init
+      
+      - name: Terraform Plan
+        run: |
+          terraform plan
+      
+      - name: Terraform Apply
+        run: |
+          terraform apply -auto-approve
+      
