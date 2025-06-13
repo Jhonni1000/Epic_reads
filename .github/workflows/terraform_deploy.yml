@@ -1,7 +1,6 @@
 name: Deploy Terraform 
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
@@ -10,6 +9,7 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 
 env:
   AWS_REGION: ${{ vars.AWS_REGION }}

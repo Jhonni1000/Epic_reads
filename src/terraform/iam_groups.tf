@@ -3,24 +3,26 @@ locals {
 }
 
 resource "aws_iam_group" "org_group" {
-    for_each = local.group_names
-    name = each.value.group_names
+    for_each = toset(local.group_names)
+    name = each.value
 }
 
-resource "aws_iam_group_policy" "admin_group_policy" {
-    name = "admin_group_policy"
-    group = local.group_names[0]
-    policy = "arn:aws:iam::aws:policy/AdministratorAccess"
+resource "aws_iam_group_policy_attachment" "admin_group_policy" {
+    group = aws_iam_group.org_group["AdminGroup"].name
+    policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
-resource "aws_iam_group_policy" "developers_group_policy" {
-    name = "developers_group_policy"
-    group = local.group_names[1]
-    policy = ["arn:aws:iam::aws:policy/AmazonEC2FullAccess", "arn:aws:iam::aws:policy/AmazonS3FullAccess", "arn:aws:iam::aws:policy/AmazonRDSFullAccess"]
+resource "aws_iam_group_policy_attachment" "developers_group_policy" {
+    for_each = [
+        "arn:aws:iam::aws:policy/AmazonEC2FullAccess", 
+        "arn:aws:iam::aws:policy/AmazonS3FullAccess", 
+        "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
+    ]
+    group = aws_iam_group.org_group["DevelopersGroup"].name
+    policy_arn = each.value
 }
 
-resource "aws_iam_group_policy" "test_group_policy" {
-    name = "test_group_policy"
-    group = local.group_names[2]
-    policy = "arn:aws:iam::aws:policy/ReadOnlyAccess" 
+resource "aws_iam_group_policy_attachment" "test_group_policy" {
+    group = aws_iam_group.org_group["TestGroup"].name
+    policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess" 
 }
