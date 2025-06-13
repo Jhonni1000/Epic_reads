@@ -5,7 +5,7 @@ on:
     branches: 
       - main
     paths:
-     - "dev/epicreads_static"
+     - "dev/epicreads_static/**"
   workflow_dispatch:
 
 permissions:
