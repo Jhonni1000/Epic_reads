@@ -8,7 +8,6 @@ data "aws_iam_policy_document" "contact_lambda_policy" {
     actions = [
       "sts:AssumeRole"
     ]
-    resources = ["*"]
   }
 }
 
