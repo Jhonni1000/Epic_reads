@@ -22,7 +22,7 @@ module "lambda_function" {
 
   function_name = "contact_lambda"
   description   = "Lambda function for sending contact-us emails"
-  handler       = "exports.handler"
+  handler       = "contact_lambda.handler"
   runtime       = "nodejs16.x"
   timeout       = "60"
   lambda_role   = aws_iam_role.contact_lambda_role.arn
