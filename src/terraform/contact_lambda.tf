@@ -38,6 +38,7 @@ module "lambda_function" {
   handler       = "contact_lambda.handler"
   runtime       = "nodejs16.x"
   timeout       = "60"
+  create_role   = false 
   lambda_role   = aws_iam_role.contact_lambda_role.arn
 
   source_path = "${path.module}/contact_lambda.js"
