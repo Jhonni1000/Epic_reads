@@ -24,11 +24,12 @@ module "lambda_function" {
   description   = "Lambda function for sending contact-us emails"
   handler       = "exports.handler"
   runtime       = "nodejs22.x"
-  role_name     = aws_iam_role.contact_lambda_role.name
+  lambda_role   = aws_iam_role.contact_lambda_role.arn
 
   source_path = "${path.module}/contact_lambda.js"
 
   tags = {
-    Name = "my-lambda1"
+    Environment = "Dev"
+    managed_by  = "OPAKI"
   }
 }
