@@ -48,3 +48,47 @@ module "lambda_function" {
     managed_by  = "OPAKI"
   }
 }
+
+resource "aws_api_gateway_rest_api" "contact_api_gateway" {
+  name = "contact_api_gateway"
+  description = "Api Gateway for Lambda contact-us"
+}
+
+resource "aws_api_gateway_resource" "contact_api_gateway_resource" {
+  rest_api_id = aws_api_gateway_rest_api.contact_api_gateway.id
+  path_part = "/"
+  parent_id = aws_api_gateway_rest_api.contact_api_gateway.root_resource_id
+}
+
+resource "aws_api_gateway_method" "contact_api_gateway_method" {
+  http_method = "GET"
+  authorization = "NONE"
+  resource_id = aws_api_gateway_resource.contact_api_gateway_resource.id
+  rest_api_id = aws_api_gateway_rest_api.contact_api_gateway.id
+}
+
+resource "aws_api_gateway_integration" "contact_api_gateway_integration" {
+  rest_api_id = aws_api_gateway_rest_api.contact_api_gateway.id
+  resource_id = aws_api_gateway_resource.contact_api_gateway_resource.id
+  http_method = aws_api_gateway_method.contact_api_gateway_method.id
+  integration_http_method = "POST"
+  uri = module.lambda_function.lambda_function_arn
+  type = "AWS_PROXY"
+}
+
+resource "aws_lambda_permission" "api_gw" {
+  statement_id = "AllowAPIGatewayInvoke"
+  action = "lambda:InvokeFunction"
+  function_name = module.lambda_function.lambda_function_name
+  principal = "apigateway.amazonaws.com"
+  source_arn = "${aws_api_gateway_rest_api.contact_api_gateway.execution_arn}/*/*"
+}
+
+resource "aws_api_gateway_deployment" "api_deploy" {
+  depends_on = [ 
+    aws_api_gateway_integration.contact_api_gateway_integration 
+  ]
+
+  rest_api_id = aws_api_gateway_rest_api.contact_api_gateway.id
+  stage_name = "dev"
+}
