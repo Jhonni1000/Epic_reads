@@ -41,7 +41,7 @@ module "lambda_function" {
   create_role   = false
   lambda_role   = aws_iam_role.contact_lambda_role.arn
 
-  source_path = "${path.module}/contact_lambda.js"
+  source_path = "${path.module}/lambda_code"
 
   tags = {
     Environment = "Dev"
