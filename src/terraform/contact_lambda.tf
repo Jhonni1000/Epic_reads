@@ -124,6 +124,8 @@ resource "aws_api_gateway_integration_response" "contact_api_gateway_options_int
   response_templates = {
     "application/json" = ""
   }
+
+  depends_on = [ aws_api_gateway_integration.contact_api_gateway_options_integration ]
 }
 
 resource "aws_lambda_permission" "api_gw" {
