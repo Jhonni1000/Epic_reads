@@ -64,7 +64,7 @@ resource "aws_api_gateway_method" "contact_api_gateway_method" {
 resource "aws_api_gateway_integration" "contact_api_gateway_integration" {
   rest_api_id = aws_api_gateway_rest_api.contact_api_gateway.id
   resource_id = aws_api_gateway_rest_api.contact_api_gateway.root_resource_id
-  http_method = aws_api_gateway_method.contact_api_gateway_method.id
+  http_method = aws_api_gateway_method.contact_api_gateway_method.http_method
   integration_http_method = "POST"
   uri = module.lambda_function.lambda_function_arn
   type = "AWS_PROXY"
