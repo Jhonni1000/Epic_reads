@@ -54,22 +54,16 @@ resource "aws_api_gateway_rest_api" "contact_api_gateway" {
   description = "Api Gateway for Lambda contact-us"
 }
 
-resource "aws_api_gateway_resource" "contact_api_gateway_resource" {
-  rest_api_id = aws_api_gateway_rest_api.contact_api_gateway.id
-  path_part = "/"
-  parent_id = aws_api_gateway_rest_api.contact_api_gateway.root_resource_id
-}
-
 resource "aws_api_gateway_method" "contact_api_gateway_method" {
   http_method = "GET"
   authorization = "NONE"
-  resource_id = aws_api_gateway_resource.contact_api_gateway_resource.id
+  resource_id = aws_api_gateway_rest_api.contact_api_gateway.root_resource_id
   rest_api_id = aws_api_gateway_rest_api.contact_api_gateway.id
 }
 
 resource "aws_api_gateway_integration" "contact_api_gateway_integration" {
   rest_api_id = aws_api_gateway_rest_api.contact_api_gateway.id
-  resource_id = aws_api_gateway_resource.contact_api_gateway_resource.id
+  resource_id = aws_api_gateway_rest_api.contact_api_gateway.root_resource_id
   http_method = aws_api_gateway_method.contact_api_gateway_method.id
   integration_http_method = "POST"
   uri = module.lambda_function.lambda_function_arn
@@ -90,5 +84,10 @@ resource "aws_api_gateway_deployment" "api_deploy" {
   ]
 
   rest_api_id = aws_api_gateway_rest_api.contact_api_gateway.id
+}
+
+resource "aws_api_gateway_stage" "api_deploy_stage" {
+  deployment_id = aws_api_gateway_deployment.api_deploy.id
   stage_name = "dev"
+  rest_api_id = aws_api_gateway_rest_api.contact_api_gateway.id
 }
