@@ -507,3 +507,34 @@ https://templatemo.com/tm-588-ebook-landing
 
     </body>
 </html>
+
+<script>
+    function submitToAPI(e) {
+      e.preventDefault();
+      const URL = "https://0o6xkxtzz1.execute-api.eu-north-1.amazonaws.com/dev";
+      const name = $("#name-input").val();
+      const email = $("#email-input").val();
+      const message = $("#message-input").val();
+      const data = {
+        name: name,
+        email: email,
+        message: message
+      };
+      $.ajax({
+        type: "POST",
+        url: URL,
+        dataType: "json",
+        crossDomain: true,
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(data),
+        success: function () {
+          alert("Thanks for contacting us, we will get back to you soon");
+          document.getElementById("contact-form").reset();
+        },
+        error: function (xhr, status, err) {
+          console.error("Submission failed:", err);
+          alert("Unsuccessful: " + xhr.responseText);
+        }
+      });
+    }
+   </script>
