@@ -1,19 +1,8 @@
 var aws = require("aws-sdk");
-
 var ses = new aws.SES({ region: "eu-north-1" });
 
 var RECEIVER = "epicreads7+1@gmail.com";
 var SENDER = "epicreads7@gmail.com";
-
-var response = {
-  "statusCode": 200,
-  "headers": {
-    "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*"
-  },
-  "isBase64Encoded": false,
-  "body": "{ \"result\": \"Success\" \n}"
-};
 
 exports.handler = async function (event, context) {
   console.log("Received event:", event);
@@ -46,5 +35,25 @@ exports.handler = async function (event, context) {
     Source: SENDER
   };
 
-  await ses.sendEmail(params).promise();
+  try {
+    await ses.sendEmail(params).promise();
+    return {
+      statusCode: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*"
+      },
+      body: JSON.stringify({ result: "Success" })
+    };
+  } catch (error) {
+    console.error("Error sending email:", error);
+    return {
+      statusCode: 500,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*"
+      },
+      body: JSON.stringify({ error: "Failed to send email" })
+    };
+  }
 };
