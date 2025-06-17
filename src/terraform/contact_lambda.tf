@@ -51,11 +51,14 @@ module "lambda_function" {
 
 resource "aws_api_gateway_rest_api" "contact_api_gateway" {
   name = "contact_api_gateway"
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
   description = "Api Gateway for Lambda contact-us"
 }
 
 resource "aws_api_gateway_method" "contact_api_gateway_method" {
-  http_method = "GET"
+  http_method = "POST"
   authorization = "NONE"
   resource_id = aws_api_gateway_rest_api.contact_api_gateway.root_resource_id
   rest_api_id = aws_api_gateway_rest_api.contact_api_gateway.id
