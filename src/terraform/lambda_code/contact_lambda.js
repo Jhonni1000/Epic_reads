@@ -41,19 +41,23 @@ exports.handler = async function (event, context) {
       statusCode: 200,
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*"
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+        "Access-Control-Allow-Methods": "POST,OPTIONS"
       },
       body: JSON.stringify({ result: "Success" })
-    };
-  } catch (error) {
-    console.error("Error sending email:", error);
-    return {
-      statusCode: 500,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*"
-      },
-      body: JSON.stringify({ error: "Failed to send email" })
-    };
-  }
+     };
+    } catch (error) {
+      console.error("Error sending email:", error);
+      return {
+        statusCode: 500,
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+          "Access-Control-Allow-Methods": "POST,OPTIONS"
+        },
+        body: JSON.stringify({ error: "Failed to send email" })
+      };
+     }
 };
