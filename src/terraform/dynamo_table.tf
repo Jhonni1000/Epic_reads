@@ -32,7 +32,7 @@ resource "aws_iam_role" "data_management_lambda_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "data_management_lambda_policy" {
-    role = aws_iam_role.data_management_lambda.name
+    role = aws_iam_role.data_management_lambda_role.arn
     policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
 }
 
