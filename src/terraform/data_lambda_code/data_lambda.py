@@ -2,7 +2,7 @@ import boto3
 import uuid
 
 def lambda_handler(event, context):
-    table_name = 'Contact_us'
+    table_name = 'Contact_us_table'
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table(table_name)
 
