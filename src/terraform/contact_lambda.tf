@@ -180,7 +180,7 @@ resource "aws_api_gateway_deployment" "api_deploy_test" {
 }
 
 resource "aws_api_gateway_stage" "api_deploy_stage" {
-  deployment_id = aws_api_gateway_deployment.api_deploy.id
+  deployment_id = aws_api_gateway_deployment.api_deploy_test.id
   stage_name    = "test"
   rest_api_id   = aws_api_gateway_rest_api.contact_api_gateway.id
 }
