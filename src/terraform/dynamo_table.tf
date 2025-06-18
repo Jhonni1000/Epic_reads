@@ -18,6 +18,22 @@ resource "aws_dynamodb_table" "contact_us_table" {
         name = "Email-Id"
         type = "S"
     }
+
+    global_secondary_index {
+        name               = "NameIndex"
+        hash_key           = "Name"
+        projection_type    = "ALL"
+        read_capacity      = 5
+        write_capacity     = 5
+    }
+
+    global_secondary_index {
+        name               = "EmailIndex"
+        hash_key           = "Email-Id"
+        projection_type    = "ALL"
+        read_capacity      = 5
+        write_capacity     = 5
+    }
 }
 
 resource "aws_iam_role" "data_management_lambda_role" {
