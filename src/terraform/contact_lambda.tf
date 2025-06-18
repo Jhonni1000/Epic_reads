@@ -171,7 +171,7 @@ resource "aws_lambda_permission" "api_gw" {
   source_arn    = "${aws_api_gateway_rest_api.contact_api_gateway.execution_arn}/*/*"
 }
 
-resource "aws_api_gateway_deployment" "api_deploy" {
+resource "aws_api_gateway_deployment" "api_deploy_test" {
   depends_on = [
     aws_api_gateway_integration.contact_api_gateway_post_integration
   ]
@@ -181,6 +181,6 @@ resource "aws_api_gateway_deployment" "api_deploy" {
 
 resource "aws_api_gateway_stage" "api_deploy_stage" {
   deployment_id = aws_api_gateway_deployment.api_deploy.id
-  stage_name    = "dev"
+  stage_name    = "test"
   rest_api_id   = aws_api_gateway_rest_api.contact_api_gateway.id
 }
