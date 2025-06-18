@@ -62,7 +62,7 @@ module "data_management_lambda" {
 
   function_name = "data_management_lambda"
   description   = "Lambda function for managing contact-us data"
-  handler       = "data_management_lambda.handler"
+  handler       = "data_lambda.handler"
   runtime       = "python3.9"
   timeout       = "60"
   create_role   = false
