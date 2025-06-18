@@ -128,7 +128,7 @@ resource "aws_api_gateway_integration_response" "contact_api_gateway_post_integr
   response_templates = {
     "application/json" = ""
   }
-  depends_on = [aws_api_gateway_integration.contact_api_gateway_integration]
+  depends_on = [aws_api_gateway_integration.contact_api_gateway_post_integration]
 }
 
 resource "aws_api_gateway_integration" "contact_api_gateway_options_integration" {
@@ -170,7 +170,7 @@ resource "aws_lambda_permission" "api_gw" {
 
 resource "aws_api_gateway_deployment" "api_deploy" {
   depends_on = [
-    aws_api_gateway_integration.contact_api_gateway_integration
+    aws_api_gateway_integration.contact_api_gateway_post_integration
   ]
 
   rest_api_id = aws_api_gateway_rest_api.contact_api_gateway.id
