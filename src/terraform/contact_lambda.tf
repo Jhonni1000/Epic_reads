@@ -128,7 +128,10 @@ resource "aws_api_gateway_integration_response" "contact_api_gateway_post_integr
   response_templates = {
     "application/json" = ""
   }
-  depends_on = [aws_api_gateway_integration.contact_api_gateway_post_integration]
+  depends_on = [
+    aws_api_gateway_integration.contact_api_gateway_post_integration,
+    aws_api_gateway_method_response.contact_api_gateway_post_method_response
+  ]
 }
 
 resource "aws_api_gateway_integration" "contact_api_gateway_options_integration" {
