@@ -63,11 +63,26 @@ resource "aws_api_gateway_resource" "contact_api_gateway_resource" {
   path_part   = "epicreads_resource"
 }
 
-resource "aws_api_gateway_method" "contact_api_gateway_method" {
+resource "aws_api_gateway_method" "contact_api_gateway_post_method" {
   http_method   = "POST"
   authorization = "NONE"
   resource_id   = aws_api_gateway_resource.contact_api_gateway_resource.id
   rest_api_id   = aws_api_gateway_rest_api.contact_api_gateway.id
+}
+
+resource "aws_api_gateway_method_response" "contact_api_gateway_post_method_response" {
+  rest_api_id = aws_api_gateway_rest_api.contact_api_gateway.id
+  resource_id = aws_api_gateway_resource.contact_api_gateway_resource.id
+  http_method = "POST"
+  status_code = "200"
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = true
+  }
+
+  response_models = {
+    "application/json" = "Empty"
+  }
 }
 
 resource "aws_api_gateway_method" "contact_api_gateway_options_method" {
@@ -77,26 +92,7 @@ resource "aws_api_gateway_method" "contact_api_gateway_options_method" {
   authorization = "NONE"
 }
 
-resource "aws_api_gateway_integration" "contact_api_gateway_integration" {
-  rest_api_id             = aws_api_gateway_rest_api.contact_api_gateway.id
-  resource_id             = aws_api_gateway_resource.contact_api_gateway_resource.id
-  http_method             = aws_api_gateway_method.contact_api_gateway_method.http_method
-  integration_http_method = "POST"
-  uri                     = module.lambda_function.lambda_function_invoke_arn
-  type                    = "AWS_PROXY"
-}
-
-resource "aws_api_gateway_integration" "contact_api_gateway_options_integration" {
-  rest_api_id = aws_api_gateway_rest_api.contact_api_gateway.id
-  resource_id = aws_api_gateway_resource.contact_api_gateway_resource.id
-  http_method = aws_api_gateway_method.contact_api_gateway_options_method.http_method
-  type        = "MOCK"
-  request_templates = {
-    "application/json" = "{\"statusCode\": 200}"
-  }
-}
-
-resource "aws_api_gateway_method_response" "contact_api_gateway_options_response" {
+resource "aws_api_gateway_method_response" "contact_api_gateway_options_method_response" {
   rest_api_id = aws_api_gateway_rest_api.contact_api_gateway.id
   resource_id = aws_api_gateway_resource.contact_api_gateway_resource.id
   http_method = aws_api_gateway_method.contact_api_gateway_options_method.http_method
@@ -110,6 +106,42 @@ resource "aws_api_gateway_method_response" "contact_api_gateway_options_response
     "application/json" = "Empty"
   }
 }
+
+resource "aws_api_gateway_integration" "contact_api_gateway_post_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.contact_api_gateway.id
+  resource_id             = aws_api_gateway_resource.contact_api_gateway_resource.id
+  http_method             = aws_api_gateway_method.contact_api_gateway_method.http_method
+  integration_http_method = "POST"
+  uri                     = module.lambda_function.lambda_function_invoke_arn
+  type                    = "AWS_PROXY"
+}
+
+resource "aws_api_gateway_integration_response" "contact_api_gateway_post_integration_response" {
+  rest_api_id = aws_api_gateway_rest_api.contact_api_gateway.id
+  resource_id = aws_api_gateway_resource.contact_api_gateway_resource.id
+  http_method = "POST"
+  status_code = "200"
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = "'*'"
+  }
+  response_templates = {
+    "application/json" = ""
+  }
+  depends_on = [aws_api_gateway_integration.contact_api_gateway_integration]
+}
+
+resource "aws_api_gateway_integration" "contact_api_gateway_options_integration" {
+  rest_api_id = aws_api_gateway_rest_api.contact_api_gateway.id
+  resource_id = aws_api_gateway_resource.contact_api_gateway_resource.id
+  http_method = aws_api_gateway_method.contact_api_gateway_options_method.http_method
+  type        = "MOCK"
+  request_templates = {
+    "application/json" = "{\"statusCode\": 200}"
+  }
+}
+
+
 
 resource "aws_api_gateway_integration_response" "contact_api_gateway_options_integration_response" {
   rest_api_id = aws_api_gateway_rest_api.contact_api_gateway.id
@@ -125,7 +157,7 @@ resource "aws_api_gateway_integration_response" "contact_api_gateway_options_int
     "application/json" = ""
   }
 
-  depends_on = [ aws_api_gateway_integration.contact_api_gateway_options_integration ]
+  depends_on = [aws_api_gateway_integration.contact_api_gateway_options_integration]
 }
 
 resource "aws_lambda_permission" "api_gw" {
