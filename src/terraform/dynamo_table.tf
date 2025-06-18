@@ -5,6 +5,11 @@ resource "aws_dynamodb_table" "contact_us_table" {
     hash_key = "Customer_id"
 
     attribute {
+        name = "Customer_id"
+        type = "S"
+    }
+
+    attribute {
         name = "Name"
         type = "S"
     }
