@@ -73,7 +73,7 @@ resource "aws_api_gateway_method" "contact_api_gateway_post_method" {
 resource "aws_api_gateway_method_response" "contact_api_gateway_post_method_response" {
   rest_api_id = aws_api_gateway_rest_api.contact_api_gateway.id
   resource_id = aws_api_gateway_resource.contact_api_gateway_resource.id
-  http_method = "POST"
+  http_method = aws_api_gateway_method.contact_api_gateway_post_method.http_method
   status_code = "200"
 
   response_parameters = {
@@ -119,7 +119,7 @@ resource "aws_api_gateway_integration" "contact_api_gateway_post_integration" {
 resource "aws_api_gateway_integration_response" "contact_api_gateway_post_integration_response" {
   rest_api_id = aws_api_gateway_rest_api.contact_api_gateway.id
   resource_id = aws_api_gateway_resource.contact_api_gateway_resource.id
-  http_method = "POST"
+  http_method = aws_api_gateway_method.contact_api_gateway_post_method.http_method
   status_code = "200"
 
   response_parameters = {
